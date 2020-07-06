@@ -1,0 +1,25 @@
+{{ form_start(form, {'attr': {'id': 'addressForm'}}) }}
+<div class="form-row">
+    <div class="form-group col-md-6">
+    {{ form_row(form.customer_type) }}
+    {{ form_row(form.phone_number) }}
+    </div>
+    <div class="form-group col-md-6">
+    {{ form_row(form.name) }}
+    {{ form_row(form.tax_number) }}
+    </div>
+    <div class="form-group col-md-6">
+    {{ form_row(form.country) }}
+    {{ form_row(form.city) }}
+    </div>
+    <div class="form-group col-md-6">
+    {{ form_row(form.post_code) }}
+    {{ form_row(form.street) }}
+    </div>
+    {{ form_row(form.priceWoTax) }}
+    {{ form_row(form.tax) }}
+    {{ form_row(form.fullPrice) }}
+    {{ form_row(form.orderNumber) }}
+</div>
+{{ form_errors(form) }}
+{{ form_end(form) }}

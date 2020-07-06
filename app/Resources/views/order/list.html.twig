@@ -1,0 +1,38 @@
+{% extends 'order/layout.html.twig' %}
+{% block title %}Megrendelés{% endblock %}
+{% block content %}
+<table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Típus</th>
+        <th scope="col">Név</th>
+        <th scope="col">Telefonszám</th>
+        <th scope="col">Adószám</th>
+        <th scope="col">Ország</th>
+        <th scope="col">Irányítószám</th>
+        <th scope="col">Város</th>
+        <th scope="col">Utca</th>
+        <th scope="col">Nettó végösszeg</th>
+        <th scope="col">Áfa összege</th>
+        <th scope="col">Bruttó végösszeg</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for orderItem in orderItems %}
+      <tr>
+        <td>{{ orderItem.customerType }}</td>
+        <td>{{ orderItem.name }}</td>
+        <td>{{ orderItem.phoneNumber }}</td>
+        <td>{{ orderItem.taxNumber }}</td>
+        <td>{{ orderItem.country }}</td>
+        <td>{{ orderItem.postCode }}</td>
+        <td>{{ orderItem.city }}</td>
+        <td>{{ orderItem.street }}</td>
+        <td>{{ orderItem.priceWoTax }}</td>
+        <td>{{ orderItem.tax }}</td>
+        <td>{{ orderItem.fullPrice }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'order/layout.html.twig' %}
+
+{% block pageTitle %} Megrendelés {% endblock %}
+
+{% block content %}
+<ul class="list-group">
+    <li class="list-group-item">Nettó végösszeg: <span id="netto" class="badge badge-primary">17890</span> Ft</li>
+    <li class="list-group-item">Áfa összege: <span id="tax" class="badge badge-primary">4857</span> Ft</li>
+    <li class="list-group-item">Bruttó végösszeg: <span id="brutto" class="badge badge-primary">22847</span> Ft</li>
+</ul>
+<br>
+<h5>Számlázási cím:</h5>
+<select name="select_address" id="select_address" class="form-control">
+    {% for address in addressList %}
+    <option value="{{ address.id }}">{{ address.name }} - {{ address.country }} {{ address.postCode }} {{ address.city }} {{ address.street }}</option>
+    {% endfor %}
+    <option value="new_address" id="new_address">Új számlázási címet adok meg</option>
+</select>
+{% endblock %}
+
+{% block form %}
+{{ include("order/form.html.twig") }}
+<input type="checkbox" name="terms" id="terms" required="required">
+<label for="terms" class="required">Kijelentem, hogy elolvastam és elfogadom az általános szerződési feltételeket.</label>
+<br>
+<div class="btns">
+    <p class='reqMessage'>A '*'-gal jelölt mezők kitöltése kötelező</p>
+    <button class="btn btn-primary text-uppercase" id="orderBtn"> Megrendelés</button>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+    $( function(){
+        // Show address form when needed
+        $('#select_address').on('change', function() {
+            let val = $(this).val();
+            if(val === 'new_address') {
+                $('#addressForm').show();
+            } else {
+                $('#addressForm').hide();
+            }
+        });
+
+        // 'Megrendelés' button
+        $('#orderBtn').on('click', function() {
+
+            // Proceed only if terms are agreed
+            if($('#terms').is(':checked')){
+           
+                // If there is a new invoice address
+                if ($('#select_address').val() === 'new_address') {
+
+                    let form = $('#addressForm');
+
+                    // Send the serialized form to controller
+                    $.ajax({
+                        url: "{{ path('create_order') }}",
+                        method: 'POST',
+                        data: form.serialize()
+                    })
+                    .done( function (data) {
+                        $('#addressForm').html(data);
+                    });
+                
+                } else {
+                    // If address chosen form the select menu
+                    // Collect form details
+                    let priceDetails = {
+                    'address_id': $('#select_address').val(),
+                    'price_wo_tax': $('#order_item_priceWoTax').val(),
+                    'tax': $('#order_item_tax').val(),
+                    'full_price': $('#order_item_fullPrice').val(),
+                    'order_number': $('#order_item_orderNumber').val()
+                    }
+
+                    // Send them to controller
+                    $.ajax({
+                        url: "{{ path('create_order_only') }}",
+                        method: 'POST',
+                        data: priceDetails,
+                    })
+                    .done( function (data) {
+
+                        // Success message (can be changed in controller)
+                        let html = '<div class="alert alert-success">' + data + '</div>';
+                        $('content').append(html);
+                    });
+                }
+            }
+        });
+    });
+    </script>
+{% endblock %}

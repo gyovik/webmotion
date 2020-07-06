@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Megrendelések{% endblock %}</title>
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        html,
+        body {
+          height: 100%;
+        }
+        .container, .content {
+          margin-top:10vh;
+        }
+        .required::after {
+          content: "*";
+          padding-left: 8px;
+          color: red;
+        }
+        .btns {
+          margin: auto;
+          text-align: center;
+        }
+        .btn-success, .btn-default{
+          display: inline-block;
+          margin: 10px auto 50px;
+        }
+        .reqMessage {
+          text-align: center;
+          padding-top: 10px;
+          color: red;
+          font-size: 10px;
+        }
+        label {
+          margin-top: 20px;
+        }
+        form[name="order_item"] {
+          display: none;
+        }
+    </style>
+</head>
+<body>
+  <main role="main" class="container">
+      <div class="row justify-content-center">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link {% if app.request.get('_route') == 'create_address' %}active{% endif %}" href="{{ path('create_address') }}">Számlázási Címeim</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if app.request.get('_route') == 'create_order' %}active{% endif %}" href="{{ path('create_order') }}">Megrendelés</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if app.request.get('_route') == 'list_orders' %}active{% endif %}" href="{{ path('list_orders') }}">Megrendelések listázása</a>
+            </li>
+        </ul>
+      </div>
+      <div class="content">
+        {% for flash_message in app.session.flashbag.get('notice') %}
+          <div class="alert alert-success">{{ flash_message }}</div> 
+        {% endfor %}
+        {% for flash_message in app.session.flashbag.get('error') %}
+          <div class="alert alert-danger">{{ flash_message }}</div> 
+        {% endfor %}
+        <h5 class="page-header">{% block pageTitle %}{% endblock %}</h5>   
+
+        {% block content %}{% endblock %}
+        {% block form %}{% endblock %}
+    
+      </div>
+  </main><!-- /.container -->
+    {# </div> #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script>
+    $('#address_customer_type').on('change', function(){
+        let custType = $(this).val();
+        if(custType === 'Magánszemély') {
+          $('#address_tax_number').removeAttr('required');
+          $('label[for="address_tax_number"]').removeClass('required');
+        }else{
+          $('#address_tax_number').attr('required', 'required');
+          $('label[for="address_tax_number"]').addClass('required');
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends 'address/list.html.twig' %}
+
+{% block pageTitle %} Számlázási cím módosítása {% endblock %}
+
+{% block form %}
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<p class='reqMessage'>A '*'-gal jelölt mezők kitöltése kötelező</p>
+<div class="btns">
+
+<button type="submit" class="btn btn-success">Cím módosítása</button>
+<a href="/address/create" class="btn btn-default">Mégse</a>
+</div>
+{{ form_end(form) }}
+{% endblock %}

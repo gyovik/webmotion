@@ -1,0 +1,14 @@
+{% extends 'address/layout.html.twig' %}
+
+{% block pageTitle %} Új számlázási cím létrehozása {% endblock %}
+
+{% block form %}
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<p class='reqMessage'>A '*'-gal jelölt mezők kitöltése kötelező</p>
+<div class="btns">
+    <button type="submit" class="btn btn-success">Új cím felvitele</button>
+</div>
+{{ form_errors(form) }}
+{{ form_end(form) }}
+{% endblock %}
